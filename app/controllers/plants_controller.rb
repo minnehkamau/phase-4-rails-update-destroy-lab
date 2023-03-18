@@ -17,7 +17,25 @@ class PlantsController < ApplicationController
     plant = Plant.create(plant_params)
     render json: plant, status: :created
   end
+  #PATCH/plants/:id
+  def update
+    plant = Plant.find_by(id: params[:id])
+    if plant.update(plant_params)
+      render json: plant
+    else
+      render json: { errors: plant.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
 
+  # DELETE /plants/:id
+  def destroy
+    plant = Plant.find_by(id: params[:id])
+    if plant.destroy
+      head :no_content
+    else
+      render json: { errors: plant.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
   private
 
   def plant_params
